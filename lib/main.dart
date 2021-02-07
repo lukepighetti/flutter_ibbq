@@ -82,25 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Spacer(),
 
-            // /// Selected device feature
-            // if (selectedDevice != null) ...[
-            //   Row(
-            //     children: [
-            //       Expanded(
-            //         child: Text('Selected device'),
-            //       ),
-            //       if (status.connectionState != null)
-            //         Text(status.connectionState.asPrettyString)
-            //     ],
-            //   ).withHorizontalPadding,
-            //   ListTile(
-            //     title: Text(selectedDevice.name),
-            //     subtitle: Text(selectedDevice.id),
-            //     trailing: Text('${selectedDevice.rssi}'),
-            //     onTap: () => _connectToDevice(selectedDevice),
-            //   ),
-            // ],
-
             if (status.probes.isNotEmpty) ...[
               Text('Probes').withHorizontalPadding,
               Row(
