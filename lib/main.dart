@@ -1,113 +1,181 @@
+import 'package:bbq/bbq_bluetooth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+
+import 'extensions.dart';
+import 'models/bbq_status.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'BBQ',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final ble = FlutterReactiveBle();
+  final bbq = BBQBluetooth();
 
-  void _incrementCounter() {
+  /// List devices feature
+  var isScanningForDevices = false;
+  var devices = <DiscoveredDevice>{};
+  DiscoveredDevice selectedDevice;
+
+  var status = BBQStatus.initial();
+
+  /// Scan for devices and add them to the [devices] list.
+  void _scanForDevices() async {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      isScanningForDevices = true;
     });
+
+    await for (var devices in bbq.scanForDevices()) {
+      setState(() {
+        this.devices = devices;
+      });
+    }
+  }
+
+  /// Connect to a specific device and start getting temperature updates.
+  void _connectToDevice(DiscoveredDevice device) async {
+    /// Guard against connecting twice in a row
+    if (selectedDevice != null) return;
+
+    setState(() {
+      selectedDevice = device;
+    });
+
+    await for (var e in bbq.deviceEvents(device)) {
+      setState(() {
+        status = e;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: SafeArea(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Spacer(),
+
+            // /// Selected device feature
+            // if (selectedDevice != null) ...[
+            //   Row(
+            //     children: [
+            //       Expanded(
+            //         child: Text('Selected device'),
+            //       ),
+            //       if (status.connectionState != null)
+            //         Text(status.connectionState.asPrettyString)
+            //     ],
+            //   ).withHorizontalPadding,
+            //   ListTile(
+            //     title: Text(selectedDevice.name),
+            //     subtitle: Text(selectedDevice.id),
+            //     trailing: Text('${selectedDevice.rssi}'),
+            //     onTap: () => _connectToDevice(selectedDevice),
+            //   ),
+            // ],
+
+            if (status.probes.isNotEmpty) ...[
+              Text('Probes').withHorizontalPadding,
+              Row(
+                children: [
+                  for (var e in status.probes)
+                    Expanded(
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              Text(
+                                '${e.number}',
+                                style: theme.textTheme.subtitle1,
+                              ),
+                              SizedBox(height: 30),
+                              SizedBox(
+                                height: 30,
+                                child: Center(
+                                  child: e.connected
+                                      ? Text(
+                                          '${e.temperature}°c',
+                                          style: theme.textTheme.headline5,
+                                        )
+                                      : Icon(Icons.cloud_off),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                ],
+              )
+            ],
+
+            SizedBox(height: 20),
+            Spacer(),
+
+            /// List feature
+            if (devices.isNotEmpty) ...[
+              Text('Found devices').withHorizontalPadding,
+              for (var e in devices)
+                ListTile(
+                  leading: Icon(
+                    selectedDevice == e
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                  ).nudge(y: 8),
+                  title: Text(e.name),
+                  subtitle: Text(
+                    e.id,
+                    style: theme.textTheme.caption,
+                  ),
+                  trailing: () {
+                    switch (status.connectionState) {
+                      case DeviceConnectionState.connecting:
+                        return Icon(Icons.bluetooth_searching);
+                      case DeviceConnectionState.connected:
+                        return Icon(Icons.bluetooth_connected);
+                      case DeviceConnectionState.disconnecting:
+                      case DeviceConnectionState.disconnected:
+                        return Text('${e.rssi}');
+                    }
+                  }(),
+                  onTap: selectedDevice == e ? null : () => _connectToDevice(e),
+                ),
+            ],
+            ElevatedButton(
+              child: Text('Scan for devices'),
+              onPressed: isScanningForDevices ? null : () => _scanForDevices(),
+            ).withHorizontalPadding,
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

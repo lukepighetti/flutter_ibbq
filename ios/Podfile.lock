@@ -1,0 +1,39 @@
+PODS:
+  - Flutter (1.0.0)
+  - flutter_reactive_ble (0.0.1):
+    - Flutter
+    - Protobuf (~> 3.5)
+    - SwiftProtobuf (~> 1.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - Protobuf (3.14.0)
+  - SwiftProtobuf (1.15.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_reactive_ble (from `.symlinks/plugins/flutter_reactive_ble/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Protobuf
+    - SwiftProtobuf
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_reactive_ble:
+    :path: ".symlinks/plugins/flutter_reactive_ble/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_reactive_ble: ac0ccac596f481b221549cad2abe16987e1f411b
+  integration_test: 5ed24a436eb7ec17b6a13046e9bf7ca4a404e59e
+  Protobuf: 0cde852566359049847168e51bd1c690e0f70056
+  SwiftProtobuf: 3320217e9d8fb75f36b40282e78c482640fd75dd
+
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+
+COCOAPODS: 1.10.1
