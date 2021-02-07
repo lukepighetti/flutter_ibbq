@@ -16,7 +16,12 @@ class BBQBluetooth {
     final stream = ble.scanForDevices(
         withServices: [BBQConstants.serviceId], scanMode: ScanMode.lowLatency);
 
+    /// When a new device is found
     await for (var device in stream) {
+      /// Guard against devices without the `iBBQ` bluetooth name.
+      if (device.name != BBQConstants.bluetoothName) return;
+
+      /// Add the device to the list if it's new.
       if (devices.containsDevice(device) == false) {
         devices.add(device);
         yield devices;
@@ -25,7 +30,7 @@ class BBQBluetooth {
   }
 
   Stream<BBQStatus> deviceEvents(DiscoveredDevice device) async* {
-    var status = BBQStatus({}, DeviceConnectionState.disconnected, null);
+    var status = BBQStatus.initial();
 
     /// Device connection status events
     await for (var e in ble.connectToDevice(id: device.id)) {

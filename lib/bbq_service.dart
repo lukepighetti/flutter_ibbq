@@ -21,6 +21,7 @@ class BBQService {
       return BBQService(device, service);
   }
 
+  /// An iBBQ service that acts on a specific device.
   BBQService(this.device, this.service);
 
   /// The device with the service

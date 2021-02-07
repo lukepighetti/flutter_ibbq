@@ -1,6 +1,6 @@
-# Flutter BBQ
+# Flutter iBBQ
 
-- [Inkbird IBT-4XS](https://www.amazon.com/gp/product/B076QDC5VL/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1), my bbq thermometer
+- [Inkbird IBT-4XS](https://www.amazon.com/gp/product/B076QDC5VL/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1), my iBBQ protocol thermometer
 - [flutter_reactive_ble](https://pub.dev/packages/flutter_reactive_ble), an awesome flutter BLE package
 - [iBBQ Gist](https://gist.github.com/uucidl/b9c60b6d36d8080d085a8e3310621d64), a protocol sketch for iBBQ protocol thermometers
 - [go-ibbq](https://github.com/sworisbreathing/go-ibbq), the king of iBBQ packages

@@ -1,10 +1,16 @@
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart' show Uuid;
 
 class BBQConstants {
+  /// iBBQ protocol devices have a bluetooth name of `iBBQ`
   static final bluetoothName = 'iBBQ';
+
+  /// The service id used by the iBBQ protocol.
   static final serviceId = Uuid.parse('fff0');
 
   /// The payload to send to the `login` characteristic to login.
+  ///
+  /// Must be called right after connecting to a device or else the host
+  /// iBBQ device will timeout by disconnecting.
   static final loginPayload = [
     0x21,
     0x07,
@@ -44,6 +50,7 @@ class BBQConstants {
     0x00,
     0x00,
   ];
+
   static final voltages = [
     5580,
     5595,

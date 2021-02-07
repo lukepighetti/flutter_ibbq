@@ -13,8 +13,13 @@ class BBQStatus {
         connectionState = DeviceConnectionState.disconnected,
         service = null;
 
+  /// The last known temperature readout from all supported probes.
   final Set<BBQProbe> probes;
+
+  /// If we're connected or disconnected from this device.
   final DeviceConnectionState connectionState;
+
+  /// The service for communicating with this specific device.
   final BBQService service;
 
   BBQStatus copyWith({
