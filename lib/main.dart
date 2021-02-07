@@ -119,6 +119,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
 
             SizedBox(height: 20),
+
+            /// Battery level feature
+            if (status.battery != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (status.battery.isCharging) ...[
+                    Icon(Icons.battery_charging_full),
+                    Text('Charging'),
+                  ] else ...[
+                    Icon(Icons.battery_std),
+                    Text('${(status.battery.percentage * 100).round()}%'),
+                  ],
+                ],
+              ),
+
+            SizedBox(height: 20),
             Spacer(),
 
             /// List feature

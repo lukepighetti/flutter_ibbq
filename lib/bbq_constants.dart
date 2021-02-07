@@ -2,16 +2,25 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart' show Uuid;
 
 class BBQConstants {
   /// iBBQ protocol devices have a bluetooth name of `iBBQ`
-  static final bluetoothName = 'iBBQ';
+  static const bluetoothName = 'iBBQ';
 
   /// The service id used by the iBBQ protocol.
   static final serviceId = Uuid.parse('fff0');
+
+  /// The time between battery polling.
+  static const batteryPollingInterval = const Duration(seconds: 5);
+
+  /// The max voltage reported during charging.
+  static const chargingVoltage = 6615;
+
+  /// The 1 byte header leading a battery level event.
+  static const batteryLevelHeader = 0x24;
 
   /// The payload to send to the `login` characteristic to login.
   ///
   /// Must be called right after connecting to a device or else the host
   /// iBBQ device will timeout by disconnecting.
-  static final loginPayload = [
+  static const loginPayload = [
     0x21,
     0x07,
     0x06,
@@ -31,7 +40,7 @@ class BBQConstants {
 
   /// The payload to send to the `settingUpdate` characteristic to start
   /// the realtime data stream.
-  static final enableRealtimeDataPayload = [
+  static const enableRealtimeDataPayload = [
     0x0B,
     0x01,
     0x00,
@@ -42,7 +51,7 @@ class BBQConstants {
 
   /// The payload to send to the `settingUpdate` characteristic to request
   /// the battery level.
-  static final requestBatteryLevelPayload = [
+  static const requestBatteryLevelPayload = [
     0x08,
     0x24,
     0x00,
@@ -51,7 +60,7 @@ class BBQConstants {
     0x00,
   ];
 
-  static final voltages = [
+  static const voltages = [
     5580,
     5595,
     5609,

@@ -1,8 +1,11 @@
+import 'package:bbq/models/bbq_probe.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'bbq_constants.dart';
 import 'bbq_service.dart';
 import 'extensions.dart';
+import 'models/bbq_battery.dart';
 import 'models/bbq_status.dart';
 
 class BBQBluetooth {
@@ -42,19 +45,25 @@ class BBQBluetooth {
       /// Continue if we're not connected
       if (e.connectionState != DeviceConnectionState.connected) continue;
 
-      final service = await BBQService.create(device);
+      final service = await BBQService.setup(device);
       status = status.copyWith(service: service);
 
-      await service.login();
-      await service.enableRealtimeData();
+      /// Subscribe to all iBBQ events
+      final combinedStream =
+          CombineLatestStream.combine2<Set<BBQProbe>, BBQBattery, BBQStatus>(
+        service.probeEvents(),
+        service.batteryEvents(),
+        (a, b) {
+          status = status.copyWith(probes: a, battery: b);
+          return status;
+        },
+      );
 
-      /// Temperature probe events
-      await for (var e in service.probeEvents()) {
-        status = status.copyWith(probes: e);
+      /// Temperature probe and battery events
+      await for (var e in combinedStream) {
+        status = e;
         yield status;
       }
-
-      print('It does go beyond probe events!');
     }
   }
 }

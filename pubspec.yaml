@@ -12,6 +12,7 @@ dependencies:
 
   cupertino_icons: ^1.0.1
   flutter_reactive_ble: ^2.7.3
+  rxdart: ^0.25.0
 
 dev_dependencies:
   flutter_test:
