@@ -1,16 +1,44 @@
-# bbq
+# MVP [Inkbird 4XS](https://www.amazon.com/gp/product/B076QDC5VL/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) Flutter App
 
-A new Flutter project.
+## Flutter packages
 
-## Getting Started
+The pick
 
-This project is a starting point for a Flutter application.
+- https://pub.dev/packages/flutter_reactive_ble
 
-A few resources to get you started if this is your first Flutter project:
+Good alternatives
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- https://pub.dev/packages/flutter_blue
+- https://pub.dev/packages/flutter_ble_lib
+- https://pub.dev/packages/rx_ble
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Others
+
+- https://pub.dev/packages/flutter_bluetooth_serial
+- https://pub.dev/packages/beacons_plugin
+- https://pub.dev/packages/ble
+
+## Research
+
+[Inkbird 4XS Thermometer](https://www.amazon.com/gp/product/B076QDC5VL/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
+
+https://github.com/search?p=1&q=ibbq&type=Repositories
+
+### Gists
+
+- https://gist.github.com/uucidl/b9c60b6d36d8080d085a8e3310621d64
+
+### Repositories
+
+- https://github.com/Ruben-E/node-ibbq
+- https://github.com/sworisbreathing/go-ibbq
+- https://github.com/linusnielsen/ibbq_server
+
+Others
+
+- https://github.com/dereulenspiegel/ibbq-gateway
+- https://github.com/runningtoy/InkBird_BLE2MQTT
+- https://github.com/gleeds/cloudbbq
+- https://github.com/adafruit/Adafruit_CircuitPython_BLE_iBBQ
+- https://github.com/quincyzhuang/ibbqgraph
+- https://github.com/apmasell/inkbird-ibt
